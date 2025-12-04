@@ -23,10 +23,16 @@ let contacts = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
   },
+  {
+    id: "1031",
+    name: "Juupa Läppä",
+    number: "67",
+  },
 ];
 
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(express.static("dist"));
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
@@ -94,7 +100,7 @@ app.delete("/api/contacts/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
