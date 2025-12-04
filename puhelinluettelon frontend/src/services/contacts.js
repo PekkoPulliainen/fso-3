@@ -21,3 +21,5 @@ const deleteContact = (id) => {
 };
 
 export default { getAll, create, update, deleteContact };
+
+/////////////////////
