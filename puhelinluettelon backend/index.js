@@ -67,11 +67,12 @@ app.get("/info", (request, response) => {
   );
 });
 
-app.delete("/api/contacts/:id", (request, response) => {
-  const id = request.params.id;
-  contacts = contacts.filter((contact) => contact.id !== id);
-
-  response.status(204).end();
+app.delete("/api/contacts/:id", (request, response, next) => {
+  Contact.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
