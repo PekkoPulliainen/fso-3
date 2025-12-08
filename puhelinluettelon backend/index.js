@@ -6,6 +6,16 @@ const app = express();
 
 let morgan = require("morgan");
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
 let contacts = [];
 
 app.use(express.json());
@@ -22,14 +32,16 @@ app.get("/api/contacts", (request, response) => {
   });
 });
 
-app.get("/api/contacts/:id", (request, response) => {
-  Contact.findById(request.params.id).then((contact) => {
-    if (contact) {
-      response.json(contact);
-    } else {
-      response.status(404).end();
-    }
-  });
+app.get("/api/contacts/:id", (request, response, next) => {
+  Contact.findById(request.params.id)
+    .then((contact) => {
+      if (contact) {
+        response.json(contact);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 app.post("/api/contacts", (request, response) => {
@@ -80,6 +92,7 @@ const unknownEndpoint = (request, response) => {
 };
 
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
