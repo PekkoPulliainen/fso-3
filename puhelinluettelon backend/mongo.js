@@ -24,7 +24,7 @@ if (process.argv[3] && process.argv[4]) {
     name: process.argv[3],
     number: process.argv[4],
   });
-  newContact.save().then((result) => {
+  newContact.save().then(() => {
     console.log(
       `added ${newContact.name} number ${newContact.number} to phonebook`
     );
@@ -39,13 +39,3 @@ if (process.argv[3] && process.argv[4]) {
     mongoose.connection.close();
   });
 }
-
-/* const testContact = new Contact({
-  name: "Jonne Jäpätin",
-  number: 358403698282,
-});
-
-testContact.save().then((result) => {
-  console.log("Contact saved!");
-  mongoose.connection.close();
-}); */
