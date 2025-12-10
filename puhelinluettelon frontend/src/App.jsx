@@ -40,15 +40,26 @@ const App = (props) => {
       important: Math.random() > 0.5,
     };
 
-    contactService.create(contactObject).then((returnedContact) => {
-      setMessage(`Added ${newName}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      setPersons(persons.concat(returnedContact));
-      setNewName("");
-      setNewNumber("");
-    });
+    contactService
+      .create(contactObject)
+      .then((returnedContact) => {
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        setPersons(persons.concat(returnedContact));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        setMessage(
+          `Person validation failed: name: ${newName} is shorter than the minimum allowed length (3).`
+        );
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
   };
 
   const handleNameChange = (event) => {
